@@ -15,7 +15,7 @@ import com.aulaspring.projetowebservice.repositories.UserRepository;
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
 
-	//Para resolver a dependencia e associar a inatância do UserRepository
+	//Para resolver a dependencia e associar a instância do UserRepository
 	@Autowired
 	private UserRepository userRepository;
 

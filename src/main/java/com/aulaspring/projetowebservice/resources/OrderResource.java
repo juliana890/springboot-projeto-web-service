@@ -9,32 +9,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aulaspring.projetowebservice.entities.User;
-import com.aulaspring.projetowebservice.service.UserService;
+import com.aulaspring.projetowebservice.entities.Order;
+import com.aulaspring.projetowebservice.service.OrderService;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserResource {
-	
+@RequestMapping(value = "/orders")
+public class OrderResource {
+
 	@Autowired
-	private UserService service;
+	private OrderService service;
 	
-	//Nosso controlador rest que responde no caminho users
-	@GetMapping
-	public ResponseEntity<List<User>> findAll() {
-		List<User> list = service.findAll();
+	//Nosso controlador rest que responde no caminho orders
+	public ResponseEntity<List<Order>> findAll(){
+		List<Order> list = service.findAll();
 		
 		//Para retornar resposta com sucesso
 		return ResponseEntity.ok().body(list);
 	}
 	
-	//Pro Spring aceitar o id colocamos a notação antes de declarar o Long
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<User> findById(@PathVariable Long id){
-		User obj = service.findById(id);
+	public ResponseEntity<Order> findById(@PathVariable Long id){
+		Order obj = service.findById(id);
 		
 		return ResponseEntity.ok().body(obj);
 	}
-	
-
 }

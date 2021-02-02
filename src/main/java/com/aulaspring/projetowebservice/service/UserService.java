@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.aulaspring.projetowebservice.entities.User;
 import com.aulaspring.projetowebservice.repositories.UserRepository;
+import com.aulaspring.projetowebservice.service.exceptions.ResourceNotFoundException;
 
 //Para a instancia funcionar a classe precisa estar registrada como um componente do Spring
 //@Component para componente
@@ -28,7 +29,10 @@ public class UserService {
 		Optional<User> obj = repository.findById(id);
 
 		// O get pega o objeto que está dentro do Optional
-		return obj.get();
+		//return obj.get();
+		
+		//O orElseThrow tenta buscar com get caso o usuário não seja encontrado ele lança uma exceção
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	// Salvar usuário no banco de dados

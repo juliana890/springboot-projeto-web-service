@@ -22,33 +22,36 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "tb_order")
 public class Order implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT") //Data no padrão ISO 8601
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT") // Data no
+																											// padrão
+																											// ISO 8601
 	private Instant moment;
-	
+
 	private Integer orderStatus;
-	
-	//Será a foreign key no banco de dados
+
+	// Será a foreign key no banco de dados
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
-	
-	//Anotation de um para muitos
+
+	// Anotation de um para muitos
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
-	
-	//Mapeando o pagamento para pedido
-	//No caso de 1 para 1 mapeamos as entidades para ter o mesmo ID
+
+	// Mapeando o pagamento para pedido
+	// No caso de 1 para 1 mapeamos as entidades para ter o mesmo ID
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
-	
-	public Order() {}
+
+	public Order() {
+	}
 
 	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
@@ -73,16 +76,16 @@ public class Order implements Serializable {
 	public void setMoment(Instant moment) {
 		this.moment = moment;
 	}
-	
+
 	public OrderStatus getOrderStatus() {
 		return OrderStatus.valueOf(orderStatus);
 	}
 
 	public void setOrderStatus(OrderStatus orderStatus) {
-		if(orderStatus != null) {
+		if (orderStatus != null) {
 			this.orderStatus = orderStatus.getCode();
 		}
-		
+
 	}
 
 	public User getClient() {
@@ -92,7 +95,7 @@ public class Order implements Serializable {
 	public void setClient(User client) {
 		this.client = client;
 	}
-	
+
 	public Payment getPayment() {
 		return payment;
 	}
@@ -101,8 +104,18 @@ public class Order implements Serializable {
 		this.payment = payment;
 	}
 
-	public Set<OrderItem> getItem(){
+	public Set<OrderItem> getItem() {
 		return items;
+	}
+
+	// Método que nos retorna a soma de todos os subTotais dos itens
+	public Double getTotal() {
+		double sum = 0.0;
+		for (OrderItem x : items) {
+			sum += x.getSubTotal();
+		}
+
+		return sum;
 	}
 
 	@Override
@@ -129,7 +142,5 @@ public class Order implements Serializable {
 			return false;
 		return true;
 	}
-
-	
 
 }

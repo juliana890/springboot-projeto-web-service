@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,5 +51,14 @@ public class UserResource {
     	//O ideal é retornar o código 201 padrão do HTTP especifico quando se insere algum dado
     	//O created espera um objeto do tipo URI
     	return ResponseEntity.created(uri).body(obj);
+    }
+    
+    //Usamos o tipo Void pois não precisamos de nenhum retorno
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+    	service.delete(id);
+    	
+    	//Utilizamos o .noContent pois o retorno não possui conteúdo
+    	return ResponseEntity.noContent().build(); //Código 204
     }
 }

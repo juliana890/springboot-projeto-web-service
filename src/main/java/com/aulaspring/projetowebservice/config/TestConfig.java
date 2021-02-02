@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import com.aulaspring.projetowebservice.entities.Category;
 import com.aulaspring.projetowebservice.entities.Order;
 import com.aulaspring.projetowebservice.entities.OrderItem;
+import com.aulaspring.projetowebservice.entities.Payment;
 import com.aulaspring.projetowebservice.entities.Product;
 import com.aulaspring.projetowebservice.entities.User;
 import com.aulaspring.projetowebservice.entities.enums.OrderStatus;
@@ -78,6 +79,13 @@ public class TestConfig implements CommandLineRunner {
 		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
 		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+		
+		Payment pay1 = new Payment(null, Instant.parse("2019-06-20T21:53:07Z"), o1);
+		//Para salvar um objeto de 1 para 1 não utilizamos o Repository
+		//Associamos o pedido o1 com o pagamento pay1
+		//Depois salvamos novamente o pedido
+		o1.setPayment(pay1);
+		orderRepository.save(o1);
 		
 	}
 	

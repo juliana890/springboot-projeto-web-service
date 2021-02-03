@@ -3,6 +3,8 @@ package com.aulaspring.projetowebservice.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -59,9 +61,14 @@ public class UserService {
 
 	//Atualizar usuário no banco de dados
 	public User update(Long id, User obj) {
-		User entity = repository.getOne(id); //O getOne vai instânciar um usuário
-		updateData(entity, obj); //Método que irá atualizar o usuário
-		return repository.save(entity); //Salvamos a alteração no banco de dados
+		try {
+			User entity = repository.getOne(id); //O getOne vai instânciar um usuário
+			updateData(entity, obj); //Método que irá atualizar o usuário
+			return repository.save(entity); //Salvamos a alteração no banco de dados
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {

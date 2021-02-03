@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.aulaspring.projetowebservice.entities.User;
 import com.aulaspring.projetowebservice.repositories.UserRepository;
+import com.aulaspring.projetowebservice.service.exceptions.DatabaseException;
 import com.aulaspring.projetowebservice.service.exceptions.ResourceNotFoundException;
 
 //Para a instancia funcionar a classe precisa estar registrada como um componente do Spring
@@ -42,7 +45,16 @@ public class UserService {
 
 	// Deletar usuário no banco de dados
 	public void delete(Long id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		}
+		catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		
 	}
 
 	//Atualizar usuário no banco de dados

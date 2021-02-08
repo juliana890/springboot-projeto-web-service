@@ -27,5 +27,20 @@ public class CategoryService {
 		return obj.get();
 		
 	}
+	
+	//Salvar categoria no banco de dados
+	public Category insert(Category obj) {
+		return repository.save(obj); //O save já retorna o objeto salvo
+	}
+	
+	//Deletar categoria no banco de dados
+	public void delete(Long id) {
+		try {
+			repository.deleteById(id);
+		}
+		catch(RuntimeException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
